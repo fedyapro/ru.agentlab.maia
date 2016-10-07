@@ -8,11 +8,11 @@ import javax.inject.Inject;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 
-import ru.agentlab.maia.agent.IGoal;
-import ru.agentlab.maia.agent.IGoalBase;
 import ru.agentlab.maia.agent.IMessage;
 import ru.agentlab.maia.agent.IRole;
 import ru.agentlab.maia.container.IContainer;
+import ru.agentlab.maia.goal.IGoal;
+import ru.agentlab.maia.goal.IGoalBase;
 import ru.agentlab.maia.message.IMessageDeliveryService;
 
 public class AbstractResponder {
@@ -40,7 +40,7 @@ public class AbstractResponder {
 	protected IAgentFilter filter = new AllowAllAgentFilter();
 
 	protected void addGoal(Object event) {
-		goalBase.add(event);
+		goalBase.addGoal(event);
 	}
 
 	protected void addEvent(Object event) {

@@ -10,8 +10,6 @@ package ru.agentlab.maia.fipa;
 import static ru.agentlab.maia.fipa.FIPAPerformativeNames.ACCEPT_PROPOSAL;
 import static ru.agentlab.maia.fipa.FIPAPerformativeNames.CANCEL;
 import static ru.agentlab.maia.fipa.FIPAPerformativeNames.CFP;
-import static ru.agentlab.maia.fipa.FIPAPerformativeNames.FAILURE;
-import static ru.agentlab.maia.fipa.FIPAPerformativeNames.INFORM;
 import static ru.agentlab.maia.fipa.FIPAPerformativeNames.NOT_UNDERSTOOD;
 import static ru.agentlab.maia.fipa.FIPAPerformativeNames.PROPOSE;
 import static ru.agentlab.maia.fipa.FIPAPerformativeNames.REFUSE;
@@ -23,10 +21,9 @@ import java.util.Map;
 
 import javax.annotation.PreDestroy;
 
-import ru.agentlab.maia.agent.IGoal;
+import ru.agentlab.maia.agent.IAgent;
 import ru.agentlab.maia.agent.IMessage;
-import ru.agentlab.maia.agent.annotation.OnGoalFailed;
-import ru.agentlab.maia.agent.annotation.OnGoalSuccess;
+import ru.agentlab.maia.goal.IGoal;
 import ru.agentlab.maia.message.annotation.OnMessageReceived;
 import ru.agentlab.maia.message.impl.AclMessage;
 
@@ -67,41 +64,18 @@ public class FIPAContractNetResponder extends AbstractResponder {
 			return;
 		case ACCEPT_PROPOSAL:
 			IGoal goal = proposals.get(message.getConversationId());
-			goalBase.add(goal);
+			goalBase.addGoal(goal);
 			return;
 		case REJECT_PROPOSAL:
 		case CANCEL:
 		case NOT_UNDERSTOOD:
-			IGoal g = proposals.remove(message.getConversationId());
-			if (g != null) {
-				initials.remove(g);
-			}
+			proposals.remove(message.getConversationId());
 			break;
 		}
 	}
 
 	@PreDestroy
-	public void onDestroy() {
-		initials.forEach((goal, message) -> {
-			goalBase.remove(goal);
-			reply(message, FAILURE, "Destroying role.. Bye..");
-		});
-	}
-
-	@OnGoalSuccess
-	public void onGoalSuccess(IGoal goal) {
-		IMessage request = initials.get(goal);
-		if (request != null) {
-			reply(request, INFORM, "Goal success");
-		}
-	}
-
-	@OnGoalFailed
-	public void onGoalFailed(IGoal goal) {
-		IMessage request = initials.get(goal);
-		if (request != null) {
-			reply(request, FAILURE, "Goal failed");
-		}
+	public void onDestroy(IAgent agent) {
 	}
 
 	private boolean notMyMessage(IMessage message) {
