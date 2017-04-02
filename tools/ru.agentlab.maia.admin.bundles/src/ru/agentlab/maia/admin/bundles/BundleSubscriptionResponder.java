@@ -22,9 +22,9 @@ import ru.agentlab.maia.agent.annotation.AxiomType;
 import ru.agentlab.maia.agent.annotation.OnBeliefAdded;
 import ru.agentlab.maia.agent.annotation.Prefix;
 import ru.agentlab.maia.agent.annotation.WhenHaveBelief;
-import ru.agentlab.maia.service.message.IMessageDeliveryService;
-import ru.agentlab.maia.service.message.annotation.OnMessageReceived;
-import ru.agentlab.maia.service.message.impl.AclMessage;
+import ru.agentlab.maia.message.IMessageDeliveryService;
+import ru.agentlab.maia.message.annotation.OnMessageReceived;
+import ru.agentlab.maia.message.impl.AclMessage;
 
 @Prefix(name = "osgi", namespace = "http://www.agentlab.ru/ontologies/osgi")
 public class BundleSubscriptionResponder {
